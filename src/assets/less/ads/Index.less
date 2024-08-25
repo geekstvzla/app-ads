@@ -1,0 +1,119 @@
+@import "../Variables.less";
+
+.container {
+    padding-bottom: 10%;
+    padding-top: 7%;
+
+    .title {
+        font-weight: bold;
+        margin-bottom: 15px;
+        padding-left: 15px;
+    }
+
+    form {
+        background-color: #fff;
+        border: 1px solid rgba(0,0,0,0.1);
+        border-radius: 18px;
+        padding: 15px;
+
+        .input-wrapper {
+
+            .input-group-text {
+                background-color: @input-background-color;
+                border: @input-border;
+                border-left: 0px !important;
+                border-radius: @input-border-radius;
+                padding: 0px;
+
+                &:hover {
+                    cursor: pointer;
+                }
+                
+                &.field-error {
+                    border-color: #cc0000;
+                }
+
+                .form-select {
+                    border: 0px;
+                    border-bottom-left-radius: 0px;
+                    border-top-left-radius: 0px;
+                    height: 100%;
+                }
+    
+            }
+
+            .form-control {
+                border-right: 0px;
+            }
+
+            .form-label {
+                margin-bottom: 2px;
+                padding-left: 15px;
+                width: 100%;
+            }
+
+            .error-msg,
+            .form-text {
+                padding-left: 15px;
+            }
+    
+            .form-control,
+            .form-select {
+                background-color: @input-background-color;
+                border: @input-border;
+                border-radius: @input-border-radius;
+                padding-left: 15px;
+
+                &:disabled {
+                    background-color: #e9ecef;
+                }
+
+                &:focus {
+                    background-color: #fff;
+                }
+
+            }
+
+            &.field-error {
+
+                .wrapper-products-list {
+                    border-color: #cc0000;
+                }
+
+            }
+
+        }
+
+        .row {
+
+            &.wrapper-map-help-block {
+
+                > .col {
+                    margin-top: 0;
+                    padding-left: 0;
+
+                    .form-text {
+                        margin-top: 0;
+                        padding-left: 15px;
+                    }
+
+                }
+
+            }
+
+        }
+        
+        .alert {
+            border-radius: @alert-border-radius;
+        }
+
+        #btn-sell {
+            border-radius: @btn-border-radius;
+            font-weight: bold;
+            margin-top: 10px;
+            text-transform: uppercase;
+        }
+
+    }
+
+}
