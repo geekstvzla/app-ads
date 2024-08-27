@@ -7,7 +7,7 @@
                     <div class="row g-2 mb-3">
                         <div :class="(v$.amount.$errors.length > 0) ? 'field-error col input-wrapper' : 'col input-wrapper'">
                             <div class="form-floating">
-                                <input class="form-control" type="file" id="formFile">
+                                <input @change="newFileLoaded" class="form-control" type="file" id="adFile">
                                 <label for="formFile" class="form-label">Archivo de la publicidad</label>
                             </div>
                             <div class="error-msg" v-for="error of v$.amount.$errors" :key="error.$uid">
@@ -139,6 +139,10 @@ export default defineComponent({
         })
 
         const data = reactive({
+            adFile: {
+                ext: "",
+                file: null
+            },
             playTime: "",
             amount: "",
             confirmed: 0,
@@ -344,6 +348,15 @@ export default defineComponent({
 
         }
 
+        const newFileLoaded = () => {
+
+            data.adFile.file = document.getElementById('adFile').files[0];
+            let fileName = data.adFile.file.name;
+            data.adFile.ext = fileName.split('.').at(-1);
+            console.log(data.adFile)
+
+        }
+
         const noAgree = () => {
             attrs.saveButton.disabled = false
         }
@@ -362,6 +375,7 @@ export default defineComponent({
             currenciesList,
             data,
             iAgree,
+            newFileLoaded,
             noAgree,
             playTimeMaskOpt,
             v$
