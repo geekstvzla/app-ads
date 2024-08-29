@@ -86,6 +86,7 @@ import { helpers, required } from '@vuelidate/validators'
 import Alert from '../components/Alert.vue'
 import { ajax } from '../../utils/AjaxRequest'
 import { vMaska } from 'maska/vue'
+//import FormData from 'form-data';
 
 export default defineComponent({
     directives: { 
@@ -101,7 +102,7 @@ export default defineComponent({
         })
 
         onMounted(() => {
-
+          
             attrs.saveButton.html = attrs.saveButton.initHtml
             attrs.saveButton.disabled = false
 
@@ -232,7 +233,7 @@ export default defineComponent({
 
             })
             .catch(error => {
-
+               
                 attrs.saveButton.disabled = false
                 attrs.saveButton.html =  attrs.saveButton.initHtml
 
@@ -260,19 +261,17 @@ export default defineComponent({
             alertProps.show = false
             attrs.saveButton.html = attrs.saveButton.loadingHtml
 
+            //const formData = new FormData(document.querySelector('form'));
+            const formData = new FormData();
+            formData.append('amount', stringToNumber(data.amount));
+            formData.append('currencyId', data.currency);
+            formData.append('file', data.adFile.file);
+            formData.append('playTime', data.playTime);
+ 
             let ajaxData = {
                 method: "post",
-                params: {
-                    amount: stringToNumber(data.amount),
-                    confirmed: data.confirmed,
-                    currencyId: data.currency,
-                    langId: 1,
-                    latitude: data.addressLatLng.lat,
-                    longitud: data.addressLatLng.lng,
-                    productId: data.productId,
-                    userId: 1
-                },
-                url: import.meta.env.VITE_API_BASE_URL+"/orders/create-sell-order"
+                formData: formData,
+                url: import.meta.env.VITE_API_BASE_URL+"/ads/create-new-ad"
             }
      
             ajax(ajaxData)
