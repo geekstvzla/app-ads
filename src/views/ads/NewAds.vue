@@ -260,7 +260,7 @@ export default defineComponent({
 
             alertProps.show = false
             attrs.saveButton.html = attrs.saveButton.loadingHtml
-
+            
             //const formData = new FormData(document.querySelector('form'));
             const formData = new FormData();
             formData.append('amount', stringToNumber(data.amount));
@@ -290,6 +290,7 @@ export default defineComponent({
                         data.confirmed = 0
                         data.currency = ""
                         //document.getElementById("address").value = ''
+                        document.querySelector('form').reset()
 
                         v$.value.$reset()
 
