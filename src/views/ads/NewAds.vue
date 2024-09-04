@@ -340,6 +340,7 @@ export default defineComponent({
             })
             .catch(error => {
 
+                attrs.saveButton.html = attrs.saveButton.initHtml
                 attrs.saveButton.disabled = false
                 console.log(error)
 
@@ -352,7 +353,6 @@ export default defineComponent({
             data.adFile.file = document.getElementById('adFile').files[0];
             let fileName = data.adFile.file.name;
             data.adFile.ext = fileName.split('.').at(-1);
-            console.log(data.adFile)
 
         }
 
