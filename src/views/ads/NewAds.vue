@@ -276,8 +276,6 @@ export default defineComponent({
      
             ajax(ajaxData)
             .then(function (response) {
-
-                console.log(response.data.response)
                 
                 attrs.saveButton.html = attrs.saveButton.initHtml
                 attrs.saveButton.disabled = false
@@ -291,7 +289,7 @@ export default defineComponent({
                         data.amount = ""
                         data.confirmed = 0
                         data.currency = ""
-                        document.getElementById("address").value = ''
+                        //document.getElementById("address").value = ''
 
                         v$.value.$reset()
 
