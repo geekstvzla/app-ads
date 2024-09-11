@@ -5,12 +5,12 @@
                 <h3 class="title">Crear nueva publicidad</h3>
                 <form>
                     <div class="row g-2 mb-3">
-                        <div :class="(v$.amount.$errors.length > 0) ? 'field-error col input-wrapper' : 'col input-wrapper'">
+                        <div :class="(v$.adFile.$errors.length > 0) ? 'field-error col input-wrapper' : 'col input-wrapper'">
                             <div class="form-floating">
                                 <input @change="newFileLoaded" class="form-control" type="file" id="adFile">
                                 <label for="formFile" class="form-label">Archivo de la publicidad</label>
                             </div>
-                            <div class="error-msg" v-for="error of v$.amount.$errors" :key="error.$uid">
+                            <div class="error-msg" v-for="error of v$.adFile.$errors" :key="error.$uid">
                                 <p>{{ error.$message }}</p>
                             </div>
                         </div>
@@ -30,33 +30,6 @@
                             </div>
                             <div id="playTimeHelpBlock" class="form-text">
                                 Ejemplo: 1, 30, 90 segundos
-                            </div>
-                            <div class="error-msg" v-for="error of v$.playTime.$errors" :key="error.$uid">
-                                <p>{{ error.$message }}</p>
-                            </div>
-                        </div>
-                        <div :class="(v$.amount.$errors.length > 0) ? 'field-error col-md input-wrapper' : 'col-md input-wrapper'">
-                            <div class="input-group">
-                                <div class="form-floating">
-                                    <input class="form-control"
-                                        :disabled="attrs.amount.disabled"
-                                        id="amount"
-                                        placeholder="Tiempo de reproducción"
-                                        type="text"
-                                        v-maska="amountMaskOpt"
-                                        v-model="data.amount">
-                                    <label>Monto</label>
-                                </div>
-                                <span :class="(v$.currency.$errors.length > 0) ? 'field-error input-group-text' : 'input-group-text'">
-                                    <select class="form-select" :disabled="attrs.currency.disabled" id="currencies" v-model="data.currency">
-                                        <option value="">-</option>
-                                        <option v-for="(item, index) in currenciesList" 
-                                                :value="item.currency_id">{{ item.currency_abb }}</option>
-                                    </select>
-                                </span>
-                            </div>
-                            <div id="currencyHelpBlock" class="form-text">
-                                Dinero que recibirá el usuario por reproducción
                             </div>
                             <div class="error-msg" v-for="error of v$.playTime.$errors" :key="error.$uid">
                                 <p>{{ error.$message }}</p>
@@ -97,10 +70,6 @@ export default defineComponent({
     },
     setup() {
 
-        onBeforeMount(() => {
-            currencies()
-        })
-
         onMounted(() => {
           
             attrs.saveButton.html = attrs.saveButton.initHtml
@@ -115,19 +84,6 @@ export default defineComponent({
             timer: 0,
             type: null
         })
-
-        const amountMaskOpt = reactive({
-            eager: true,
-            mask: "#,##",
-            number: {
-                fraction: 2,
-                locale: 'de',
-                unsigned: true           
-            },
-            reversed: true           
-        })
-
-        const currenciesList = ref()
 
         const playTimeMaskOpt = reactive({
             eager: true,
@@ -145,28 +101,12 @@ export default defineComponent({
                 file: null
             },
             playTime: "",
-            amount: "",
-            confirmed: 0,
-            currency: ""
+            confirmed: 0
         })
         
         const attrs = reactive({
             playTime: {
                 disabled: false
-            },
-            amount: {
-                disabled: false,
-                format: {
-                    decimal: ',',
-                    separator: '.',
-                    precision: 2,
-                    masked: false,
-                    min: "0,00",
-                    nullValue: "0,00"
-                }
-            },
-            currency: {
-                disabled: true
             },
             saveButton:{
                 disabled: true,
@@ -177,9 +117,10 @@ export default defineComponent({
         });
         
         const rules = {
-            playTime: { required: helpers.withMessage('Requerido', required) },
-            amount: { required: helpers.withMessage('Requerido', required) },
-            currency: { required: helpers.withMessage('Requerido', required) }
+            adFile: {
+                ext: { required: helpers.withMessage('Requerido', required) }
+            },
+            playTime: { required: helpers.withMessage('Requerido', required) }
         }
 
         const v$ = useVuelidate(rules, data, { $scope: false })
@@ -214,48 +155,6 @@ export default defineComponent({
 
         }
 
-        const currencies = () => {
-           
-            let ajaxData = {
-                method: "get",
-                url: import.meta.env.VITE_API_BASE_URL+"/catalogs/currencies-enabled"
-            }
-
-            ajax(ajaxData)
-            .then(function (response) {
-                
-                if(response.status === 200 && response.data.response) {
-                    
-                    currenciesList.value = response.data.response.currencies
-                    attrs.currency.disabled = false
-
-                }
-
-            })
-            .catch(error => {
-               
-                attrs.saveButton.disabled = false
-                attrs.saveButton.html =  attrs.saveButton.initHtml
-
-                if(error.message) {
-
-                    let alertData = {
-                        close: (error.close) ? error.close : false,
-                        message: error.message,
-                        show: true,
-                        timer: (error.timer) ? error.timer : false,
-                        timerSeconds: (error.timerSeconds) ? error.timerSeconds : 0,
-                        type: (error.type) ? error.type : "error"
-                    }
-
-                    Object.assign(alertProps, alertData)
-
-                }
-
-            })  
-
-        }
-
         const iAgree = () => {
 
             alertProps.show = false
@@ -263,8 +162,6 @@ export default defineComponent({
             
             //const formData = new FormData(document.querySelector('form'));
             const formData = new FormData();
-            formData.append('amount', stringToNumber(data.amount));
-            formData.append('currencyId', data.currency);
             formData.append('file', data.adFile.file);
             formData.append('playTime', data.playTime);
  
@@ -286,9 +183,7 @@ export default defineComponent({
 
                         data.address = ""
                         data.addressLatLng = ""
-                        data.amount = ""
                         data.confirmed = 0
-                        data.currency = ""
                         //document.getElementById("address").value = ''
                         document.querySelector('form').reset()
 
@@ -367,10 +262,8 @@ export default defineComponent({
 
         return {
             alertProps,
-            amountMaskOpt,
             attrs,
             confirmSale,
-            currenciesList,
             data,
             iAgree,
             newFileLoaded,
