@@ -1,0 +1,132 @@
+@import "../Variables.less";
+
+.container {
+    padding-bottom: 10%;
+    padding-top: 5%;
+
+    .title {
+        font-weight: bold;
+        margin-bottom: 15px;
+        padding-left: 15px;
+    }
+
+    .wrapper-user-info {
+        margin-top: 25px;
+    }
+
+    form {
+        background-color: #fff;
+        border: 1px solid rgba(0,0,0,0.1);
+        border-radius: 18px;
+        padding: 15px;
+
+        .input-wrapper {
+
+            .form-control {
+                background-color: @input-background-color;
+                border: @input-border;
+                border-radius: @input-border-radius;
+                border-right: 0px !important;
+                padding-left: 15px;
+
+                &:disabled {
+                    background-color: #e9ecef;
+                }
+
+                &:focus {
+                    background-color: #fff;
+                }
+
+            }
+
+            .input-group-text {
+                background-color: @input-background-color;
+                border: @input-border;
+                border-left: 0px !important;
+                border-radius: @input-border-radius;
+                padding: 0px 5px;
+
+                &:hover {
+                    cursor: pointer;
+                }
+                
+                &.field-error {
+                    border-color: #cc0000;
+                }
+    
+            }
+
+            .form-text {
+                padding-left: 15px;
+            }
+    
+            &.field-error {
+
+                .wrapper-users-list {
+                    border-color: #cc0000;
+                }
+
+            }
+
+            .wrapper-users-list {
+                border: @input-border;
+                border-radius: @input-border-radius;
+                border-top-left-radius: 0px;
+                border-top-right-radius: 0px;
+            }
+
+            &.list-opened {
+                position:relative;
+
+                // User field
+                &:nth-child(1) {
+
+                    .input-group-text {
+                        border-bottom: 0px;
+                        border-bottom-right-radius: 0px;
+                    }
+
+                    .form-control {
+                        border-bottom: 0px;
+                        border-bottom-left-radius: 0px;
+                        border-bottom-right-radius: 0px;
+                    }
+
+                }
+
+                .wrapper-users-list {
+                    background-color: #fff;
+                    position: absolute;
+                    width: 100%;
+                    z-index: 10;
+
+                    ul {
+                        list-style: none;
+                        margin-bottom: 0px;
+                        padding-left: 10px;
+                        padding-right: 10px;
+
+                        li {
+                            padding: 10px 5px;
+
+                            &:hover {
+                                cursor: pointer;
+                            }
+
+                        }
+
+                    }
+
+                }
+                
+            }
+
+        }
+        
+        .alert {
+            border-radius: @alert-border-radius;
+        }
+
+    }
+
+}
