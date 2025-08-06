@@ -2,6 +2,7 @@
     <div class="container" @click="hideList">
         <div class="row justify-content-center">
             <div class="col-12 col-md-8 col-lg-6">
+                <h5 class="title">Actualmente existen {{ activeUsers }} usuarios activos </h5>
                 <h3 class="title">Buscar usuario</h3>
                 <form class="row">
                     <div class="col">
@@ -71,7 +72,7 @@
 
 <script>
 
-import { defineComponent, reactive, ref } from 'vue';
+import { defineComponent, onMounted, reactive, ref } from 'vue';
 import useVuelidate from '@vuelidate/core';
 import { helpers, required } from '@vuelidate/validators';
 import Alert from '../components/Alert.vue';
@@ -87,6 +88,7 @@ export default defineComponent({
     },
     setup() {
 
+        const activeUsers = ref(0);
         const alertProps = reactive({
             iconCloseButton: false,
             message: "",
@@ -131,6 +133,47 @@ export default defineComponent({
         const usersList = ref();
         const rules = {
             userId: { required: helpers.withMessage('Requerido', required) }
+        }
+
+        const getActiveUsers = () => {
+            
+            let ajaxData = {    
+                method: "get",
+                params: {},
+                url: import.meta.env.VITE_API_BASE_URL+"/users/active-users"
+            };
+        
+            ajax(ajaxData)
+            .then(function (rs) {
+               
+                if(rs.status === 200 && rs.data) {
+
+                    activeUsers.value = rs.data.users
+
+                };
+
+            })
+            .catch(error => {
+
+                console.log(error);
+
+                if(error.message) {
+
+                    /*let alertData = {
+                        close: (error.close) ? error.close : false,
+                        message: error.message,
+                        show: true,
+                        timer: (error.timer) ? error.timer : false,
+                        timerSeconds: (error.timerSeconds) ? error.timerSeconds : 0,
+                        type: (error.type) ? error.type : "error"
+                    }
+
+                    Object.assign(alertProps, alertData)*/
+
+                };
+
+            }); 
+
         }
 
         const userListClass = (error, listOpened) => {
@@ -326,7 +369,14 @@ export default defineComponent({
 
         };
 
+        onMounted(() => {
+
+            getActiveUsers();
+
+        });
+
         return {
+            activeUsers,
             alertProps,
             amountMaskOpt,
             attrs,
